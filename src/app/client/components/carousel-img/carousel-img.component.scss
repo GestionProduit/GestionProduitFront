@@ -1,0 +1,25 @@
+/*Carousel-demo*/
+.carousel-demo{
+    animation: straw 15s ease infinite;
+}
+@keyframes straw {
+  0%{
+    background-image: url('/assets/carousel/carousel-moto-2.jpg');
+  }
+  20%{
+    background-image: url('/assets/carousel/carousel-moto-3.jpg');
+  }
+  40%{
+    background-image: url('/assets/carousel/carousel-moto-4.jpg');
+  }
+  60%{
+    background-image: url('/assets/carousel/carousel-moto-5.jpg');
+  }
+  80%{
+    background-image: url('/assets/carousel/carousel-moto-6.jpg');
+  }
+  100%{
+    background-image: url('/assets/carousel/carousel-moto-7.jpg');
+  }
+}
+/*Carousel-demo*/

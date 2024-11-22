@@ -1,0 +1,18 @@
+.position-menu{
+  width: 60rem;
+  top: 3rem;
+  left: 22rem;
+}
+
+#pn_id_1{
+  width: auto;
+}
+
+/* CSS media query for mobile devices */
+@media only screen and (max-width: 767px) {
+  /* Add your mobile-specific CSS styles here */
+  .position-menu{
+    left: 5rem;
+  }
+  /* ... */
+}
