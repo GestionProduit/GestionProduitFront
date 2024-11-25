@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Product } from '../../../domain/Product';
-import { ProductService } from '../../../service/poductservice/productservice.service';
+import { ProductService } from '../../../service/productservice/productservice.service';
 import { DataViewModule } from 'primeng/dataview';
 import { TagModule } from 'primeng/tag';
 import { RatingModule } from 'primeng/rating';
