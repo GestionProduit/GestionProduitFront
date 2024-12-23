@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Product } from '../../../domain/Product';
+import { Product } from '../../../module/Product';
 import { ProductService } from '../../../service/productservice/productservice.service';
 import { DataViewModule } from 'primeng/dataview';
 import { TagModule } from 'primeng/tag';
@@ -19,12 +19,16 @@ export class ProdItemComponent {
   layoutch: 'list' | 'grid' = 'grid';
 
 
-  products!: Product[];
+  products!: any[];
 
   constructor(private productService: ProductService) {}
 
   ngOnInit() {
-      this.productService.getProducts().then((data) => (this.products = data.slice(0, 12)));
+        this.productService.getAll().subscribe(data => {
+            // console.log(data);
+            this.products = data;
+          });
+    //   this.productService.getProducts().then((data) => (this.products = data.slice(0, 12)));
   }
   getSeverity(product: Product) : "success" | "warning" | "danger" | undefined {
       switch (product.inventoryStatus) {

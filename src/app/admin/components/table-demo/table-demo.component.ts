@@ -17,8 +17,9 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { RatingModule } from 'primeng/rating';
 import { FormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { Product } from '../../../domain/Product';
+import { Product, ProductRequest, ProductResponse } from '../../../module/Product';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { ProductService } from '../../../service/productservice/productservice.service';
 
 @Component({
   selector: 'app-table-demo',
@@ -31,245 +32,74 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 export class TableDemoComponent {
   productDialog: boolean = false;
 
-    products!: Product[];
+  productRequest! : ProductRequest;
 
-    product!: Product;
+    products: any[]=[];
+
+    product!: any;
 
     selectedProducts!: Product[] | null;
 
     submitted: boolean = false;
 
-    statuses!: any[];
+    status!: any[];
 
-    constructor(private messageService: MessageService, private confirmationService: ConfirmationService) {}
+ 
+ 
+    constructor(private messageService: MessageService, private confirmationService: ConfirmationService,
+        private productService : ProductService) {}
 
     ngOnInit() {
-        //this.productService.getProducts().then((data) => (this.products = data));
-        this.products = [
-          {
-              id: '1000',
-              code: 'f230fh0g3',
-              name: 'Bamboo Watch',
-              description: 'Product Description',
-              image: 'bamboo-watch.jpg',
-              price: 65,
-              category: 'Accessories',
-              quantity: 24,
-              inventoryStatus: 'INSTOCK',
-              rating: 5
-          },
-          {
-              id: '1001',
-              code: 'nvklal433',
-              name: 'Black Watch',
-              description: 'Product Description',
-              image: 'black-watch.jpg',
-              price: 72,
-              category: 'Accessories',
-              quantity: 61,
-              inventoryStatus: 'OUTOFSTOCK',
-              rating: 4
-          },
-          {
-              id: '1002',
-              code: 'zz21cz3c1',
-              name: 'Blue Band',
-              description: 'Product Description',
-              image: 'blue-band.jpg',
-              price: 79,
-              category: 'Fitness',
-              quantity: 2,
-              inventoryStatus: 'LOWSTOCK',
-              rating: 3
-          },
-          {
-              id: '1003',
-              code: '244wgerg2',
-              name: 'Blue T-Shirt',
-              description: 'Product Description',
-              image: 'blue-t-shirt.jpg',
-              price: 29,
-              category: 'Clothing',
-              quantity: 25,
-              inventoryStatus: 'INSTOCK',
-              rating: 5
-          },
-          {
-              id: '1004',
-              code: 'h456wer53',
-              name: 'Bracelet',
-              description: 'Product Description',
-              image: 'bracelet.jpg',
-              price: 15,
-              category: 'Accessories',
-              quantity: 73,
-              inventoryStatus: 'INSTOCK',
-              rating: 4
-          },
-          {
-              id: '1005',
-              code: 'av2231fwg',
-              name: 'Brown Purse',
-              description: 'Product Description',
-              image: 'brown-purse.jpg',
-              price: 120,
-              category: 'Accessories',
-              quantity: 0,
-              inventoryStatus: 'OUTOFSTOCK',
-              rating: 4
-          },
-          {
-              id: '1006',
-              code: 'bib36pfvm',
-              name: 'Chakra Bracelet',
-              description: 'Product Description',
-              image: 'chakra-bracelet.jpg',
-              price: 32,
-              category: 'Accessories',
-              quantity: 5,
-              inventoryStatus: 'LOWSTOCK',
-              rating: 3
-          },
-          {
-              id: '1007',
-              code: 'mbvjkgip5',
-              name: 'Galaxy Earrings',
-              description: 'Product Description',
-              image: 'galaxy-earrings.jpg',
-              price: 34,
-              category: 'Accessories',
-              quantity: 23,
-              inventoryStatus: 'INSTOCK',
-              rating: 5
-          },
-          {
-              id: '1008',
-              code: 'vbb124btr',
-              name: 'Game Controller',
-              description: 'Product Description',
-              image: 'game-controller.jpg',
-              price: 99,
-              category: 'Electronics',
-              quantity: 2,
-              inventoryStatus: 'LOWSTOCK',
-              rating: 4
-          },
-          {
-              id: '1009',
-              code: 'cm230f032',
-              name: 'Gaming Set',
-              description: 'Product Description',
-              image: 'gaming-set.jpg',
-              price: 299,
-              category: 'Electronics',
-              quantity: 63,
-              inventoryStatus: 'INSTOCK',
-              rating: 3
-          },
-          {
-              id: '1010',
-              code: 'plb34234v',
-              name: 'Gold Phone Case',
-              description: 'Product Description',
-              image: 'gold-phone-case.jpg',
-              price: 24,
-              category: 'Accessories',
-              quantity: 0,
-              inventoryStatus: 'OUTOFSTOCK',
-              rating: 4
-          },
-          {
-              id: '1011',
-              code: '4920nnc2d',
-              name: 'Green Earbuds',
-              description: 'Product Description',
-              image: 'green-earbuds.jpg',
-              price: 89,
-              category: 'Electronics',
-              quantity: 23,
-              inventoryStatus: 'INSTOCK',
-              rating: 4
-          },
-          {
-              id: '1012',
-              code: '250vm23cc',
-              name: 'Green T-Shirt',
-              description: 'Product Description',
-              image: 'green-t-shirt.jpg',
-              price: 49,
-              category: 'Clothing',
-              quantity: 74,
-              inventoryStatus: 'INSTOCK',
-              rating: 5
-          },
-          {
-              id: '1013',
-              code: 'fldsmn31b',
-              name: 'Grey T-Shirt',
-              description: 'Product Description',
-              image: 'grey-t-shirt.jpg',
-              price: 48,
-              category: 'Clothing',
-              quantity: 0,
-              inventoryStatus: 'OUTOFSTOCK',
-              rating: 3
-          },
-          {
-              id: '1014',
-              code: 'waas1x2as',
-              name: 'Headphones',
-              description: 'Product Description',
-              image: 'headphones.jpg',
-              price: 175,
-              category: 'Electronics',
-              quantity: 8,
-              inventoryStatus: 'LOWSTOCK',
-              rating: 5
-          },
-          {
-              id: '1015',
-              code: 'vb34btbg5',
-              name: 'Light Green T-Shirt',
-              description: 'Product Description',
-              image: 'light-green-t-shirt.jpg',
-              price: 49,
-              category: 'Clothing',
-              quantity: 34,
-              inventoryStatus: 'INSTOCK',
-              rating: 4
-          },
-          {
-              id: '1016',
-              code: 'k8l6j58jl',
-              name: 'Lime Band',
-              description: 'Product Description',
-              image: 'lime-band.jpg',
-              price: 79,
-              category: 'Fitness',
-              quantity: 12,
-              inventoryStatus: 'INSTOCK',
-              rating: 3
-          },
-          {
-              id: '1017',
-              code: 'v435nn85n',
-              name: 'Mini Speakers',
-              description: 'Product Description',
-              image: 'mini-speakers.jpg',
-              price: 85,
-              category: 'Clothing',
-              quantity: 42,
-              inventoryStatus: 'INSTOCK',
-              rating: 4
-          }
-        ];
 
-        this.statuses = [
+        this.productService.getAll().subscribe(data => {
+            // console.log(data);
+            this.products = data;
+          });
+       
+        this.status = [
             { label: 'INSTOCK', value: 'instock' },
             { label: 'LOWSTOCK', value: 'lowstock' },
             { label: 'OUTOFSTOCK', value: 'outofstock' }
         ];
+
+        this.saveProduct();
+        this.deleteProduct(this.product.id);
     }
+
+    // saveProduct() {
+    //     this.submitted = true;
+
+    //     if (!this.product.libelle || !this.product.description || !this.product.marque || this.product.prix === undefined || this.product.qteStock === undefined) {
+    //         return;
+    //     }
+
+
+    //     this.productService.createProduct(this.product).subscribe({
+    //         next: (newProduct) => {
+    //             console.log("Entre service create pro " + JSON.stringify(newProduct));
+    //             this.products.push(newProduct);
+    //             this.productDialog = false;
+    //             this.product = {} as ProductRequest;
+    //         },
+    //         error: (err) => {
+    //             console.error('Error creating product:', err);
+    //         }
+    //     });
+    // }
+
+    // updateProduct(product: ProductResponse) {
+    //     const productId = product.id; // Assuming your product has an `id` field
+    //     this.productService.updateProduct(productId, product).subscribe(
+    //         updatedProduct => {
+    //             console.log('Product updated:', updatedProduct);
+    //             // Update the product list or handle UI feedback here
+    //         },
+    //         error => {
+    //             console.error('Error updating product:', error);
+    //         }
+    //     );
+    // }
+
 
     openNew() {
         this.product = {};
@@ -277,92 +107,135 @@ export class TableDemoComponent {
         this.productDialog = true;
     }
 
-    deleteSelectedProducts() {
-        this.confirmationService.confirm({
-            message: 'Are you sure you want to delete the selected products?',
-            header: 'Confirm',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                this.products = this.products.filter((val) => !this.selectedProducts?.includes(val));
-                this.selectedProducts = null;
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-            }
-        });
+    // deleteSelectedProducts() {
+    //     this.confirmationService.confirm({
+    //         message: 'Are you sure you want to delete the selected products?',
+    //         header: 'Confirm',
+    //         icon: 'pi pi-exclamation-triangle',
+    //         accept: () => {
+    //             this.products = this.products.filter((val) => !this.selectedProducts?.includes(val));
+    //             this.selectedProducts = null;
+    //             this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
+    //         }
+    //     });
+    // }
+
+    editProduct(product: ProductResponse) {
+        this.product = { ...product }; // Clone the selected product into the local product object
+        this.productDialog = true; // Open the dialog
     }
 
-    editProduct(product: Product) {
-        this.product = { ...product };
-        this.productDialog = true;
+    
+    saveProduct() {
+        this.submitted = true;
+    
+    
+        if (this.product.id) {
+            this.productService.updateProduct(this.product.id, this.product).subscribe(
+                (updatedProduct) => {
+                    const index = this.products.findIndex(p => p.id === this.product.id);
+                    if (index !== -1) {
+                        this.products[index] = updatedProduct;
+                    }
+    
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'Product updated successfully!',
+                        life: 5000
+                    });
+                    this.hideDialog();
+                },
+                (error) => {
+                    console.error('Error updating product:', error);
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Failed to update product.'
+                    });
+                }
+            );
+        } else {
+            this.productService.createProduct(this.product).subscribe(
+                (newProduct) => {
+                    this.products.push(newProduct);
+    
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'Product created successfully!',
+                        life: 5000
+                    });
+                    this.hideDialog();
+                },
+                (error) => {
+                    console.error('Error creating product:', error);
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Failed to create product.'
+                    });
+                }
+            );
+        }
     }
 
-    deleteProduct(product: Product) {
+    deleteProduct(productId: any) {
         this.confirmationService.confirm({
-            message: 'Are you sure you want to delete ' + product.name + '?',
-            header: 'Confirm',
-            icon: 'pi pi-exclamation-triangle',
+            message: 'Are you sure you want to delete this product?',
             accept: () => {
-                this.products = this.products.filter((val) => val.id !== product.id);
-                this.product = {};
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-            }
+                this.productService.deleteProduct(productId).subscribe({
+                    next: () => {
+                        this.products = this.products.filter(product => product.id !== productId);
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Success',
+                            detail: 'Product deleted successfully!',
+                            life: 3000,
+                        });
+                    },
+                    error: err => {
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Failed to delete product.',
+                            life: 3000,
+                        });
+                    },
+                });
+            },
         });
     }
+    
+    
+
+   
 
     hideDialog() {
         this.productDialog = false;
         this.submitted = false;
     }
 
-    saveProduct() {
-        this.submitted = true;
+  
 
-        if (this.product.name?.trim()) {
-            if (this.product.id) {
-                this.products[this.findIndexById(this.product.id)] = this.product;
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-            } else {
-                this.product.id = this.createId();
-                this.product.image = 'product-placeholder.svg';
-                this.products.push(this.product);
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-            }
+    // createId(): string {
+    //     let id = '';
+    //     var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    //     for (var i = 0; i < 5; i++) {
+    //         id += chars.charAt(Math.floor(Math.random() * chars.length));
+    //     }
+    //     return id;
+    // }
 
-            this.products = [...this.products];
-            this.productDialog = false;
-            this.product = {};
-        }
-    }
-
-    findIndexById(id: string): number {
-        let index = -1;
-        for (let i = 0; i < this.products.length; i++) {
-            if (this.products[i].id === id) {
-                index = i;
-                break;
-            }
-        }
-
-        return index;
-    }
-
-    createId(): string {
-        let id = '';
-        var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (var i = 0; i < 5; i++) {
-            id += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return id;
-    }
-
-    getSeverity(status: string): "success" | "warning" | "danger"{
-        switch (status) {
-            case 'INSTOCK':
-                return 'success';
-            case 'LOWSTOCK':
-                return 'warning';
-            case 'OUTOFSTOCK':
-                return 'danger';
-        }
-        return "warning";
-    }
+    // getSeverity(status: string): "success" | "warning" | "danger"{
+    //     switch (status) {
+    //         case 'INSTOCK':
+    //             return 'success';
+    //         case 'LOWSTOCK':
+    //             return 'warning';
+    //         case 'OUTOFSTOCK':
+    //             return 'danger';
+    //     }
+    //     return "warning";
+    // }
 }

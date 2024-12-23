@@ -1,0 +1,61 @@
+<div class="surface-card p-4 shadow-2 border-round w-full lg:w-6 mx-auto">
+    <div class="text-center mb-5">
+      <div class="text-900 text-3xl font-medium mb-3">Login</div>
+    </div>
+  
+    
+      <div class="mb-3">
+        <label for="username" class="block text-900 font-medium mb-2">Username</label>
+        <input 
+          id="username" 
+          type="text" 
+          pInputText 
+          [(ngModel)]="login.username" 
+          name="username"
+          class="w-full"
+          [class.ng-invalid]="submitted && !login.username"
+        >
+        <small 
+          *ngIf="submitted && !login.username" 
+          class="p-error block"
+        >
+          Username is required
+        </small>
+      </div>
+  
+      <div class="mb-3">
+        <label for="password" class="block text-900 font-medium mb-2">Password</label>
+        <input 
+          id="password" 
+          type="password" 
+          pInputText 
+          [(ngModel)]="login.password" 
+          name="password"
+          class="w-full"
+          [class.ng-invalid]="submitted && !login.password"
+        >
+        <small 
+          *ngIf="submitted && !login.password" 
+          class="p-error block"
+        >
+          Password is required
+        </small>
+      </div>
+  
+
+      <p-button
+      label="Login"
+      icon="pi pi-check"
+      [text]="true"
+      (onClick)="loginUser()"
+  ></p-button>
+  
+      <div class="mt-3 text-center">
+        <a href="#" class="text-blue-500 cursor-pointer">Forgot Password?</a>
+        <p class="mt-2">
+          Don't have an account? 
+          <a href="/register" class="text-blue-500">Register</a>
+        </p>
+      </div>
+    
+  </div>

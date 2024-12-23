@@ -1,0 +1,268 @@
+
+<div class="card">
+    <p-toast />
+    <p-toolbar styleClass="mb-4 gap-2">
+        <ng-template pTemplate="left">
+            <p-button
+                severity="success"
+                label="New"
+                icon="pi pi-plus"
+                class="mr-2"
+                (onClick)="openNew()" />
+            <p-button
+                severity="danger"
+                label="Delete"
+                icon="pi pi-trash"
+                (onClick)="deleteSelectedClients()"
+                [disabled]="!selectedClients || !selectedClients.length" />
+        </ng-template>
+  
+        <ng-template pTemplate="right">
+            <p-fileUpload
+                mode="basic"
+                accept="image/*"
+                [maxFileSize]="1000000"
+                label="Import"
+                chooseLabel="Import"
+                class="mr-2 inline-block" />
+            <p-button
+                severity="help"
+                label="Export"
+                icon="pi pi-upload" />
+        </ng-template>
+    </p-toolbar>
+  
+    <p-table
+        #dt
+        [value]="clients"
+        [rows]="10"
+        [paginator]="true"
+        [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+        [tableStyle]="{ 'min-width': '75rem' }"
+        [(selection)]="selectedClients"
+        [rowHover]="true"
+        dataKey="id"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true"
+    >
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <h5 class="m-0">Manage Clients</h5>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input
+                        #globalFilterInput
+                        pInputText
+                        type="text"
+                        (input)="dt.filterGlobal(globalFilterInput.value, 'contains')"
+                        placeholder="Search..." />
+                </span>
+            </div>
+        </ng-template>
+
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 4rem">
+                    <p-tableHeaderCheckbox />
+                </th>
+                <th pSortableColumn="nom" style="min-width:15rem">
+                    Nom<p-sortIcon field="nom" />
+                </th>
+                <th pSortableColumn="prenom" style="min-width:10rem">
+                    Prénom <p-sortIcon field="prenom" />
+                </th>
+                <th pSortableColumn="image" style="min-width:15rem">
+                    Image<p-sortIcon field="image" />
+                </th>
+              <th pSortableColumn="telephone" style="min-width:10rem">
+                  Tel <p-sortIcon field="telephone" />
+              </th>
+             
+                <th pSortableColumn="email">
+                    Email <p-sortIcon field="email" />
+                </th>
+              
+                <th pSortableColumn="action" style="min-width:10rem">
+                    Action <p-sortIcon field="action" />
+                </th>
+             
+            
+          
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-client>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="client" />
+                </td>
+                <td>
+                    {{ client.nom }}
+                </td>
+                <td>
+                    {{ client.prenom }}
+                  </td>
+                <td>
+                <img
+                    [src]="'/assets/carousel/' + client.image"
+                    width="50"
+                    class="shadow-4" />
+                </td>
+            
+                  <td>
+                      {{ client.telephone }}
+                  </td>
+                  <td>
+                      {{ client.email }}
+                  </td>
+                <!-- <td>
+                    <p-rating
+                        [(ngModel)]="product.rating"
+                        [readonly]="true"
+                        [cancel]="false" />
+                </td> -->
+                <!-- <td>
+                    <p-tag
+                        [value]="product.inventoryStatus"
+                        [severity]="getSeverity(product.inventoryStatus)" />
+                </td> -->
+                <td>
+                    <p-button
+                        icon="pi pi-pencil"
+                        class="mr-2"
+                        [rounded]="true"
+                        [outlined]="true"
+                        severity="success"
+                        (onClick)="editClient(client)" />
+                    <p-button
+                        icon="pi pi-trash"
+                        severity="danger"
+                        [rounded]="true"
+                        [outlined]="true"
+                        (click)="deleteClient(client.id)"
+                        />
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+                In total there are {{ clients ? clients.length : 0 }} clients.
+            </div>
+        </ng-template>
+    </p-table>
+  
+    <p-dialog
+    [(visible)]="clientDialog"
+    [style]="{ width: '450px' }"
+    [modal]="true"
+    styleClass="p-fluid"
+    [header]="client?.id ? 'Edit Client' : 'Add Client'">
+        
+            <ng-template pTemplate="content">
+              
+                <div class="field">
+                    <label for="nom">Nom</label>
+                    <input
+                        type="text"
+                        pInputText
+                        id="nom"
+                        [(ngModel)]="client.nom"
+                        required
+                        autofocus />
+                    <small class="p-error" *ngIf="submitted && !client.nom">
+                        Nom is required.
+                    </small>
+                </div>
+                <div class="field">
+                    <label for="prenom">Prénom</label>
+                    <input
+                        type="text"
+                        pInputText
+                        id="prenom"
+                        [(ngModel)]="client.prenom"
+                        required
+                        autofocus />
+                    <small class="p-error" *ngIf="submitted && !client.prenom">
+                        Prénom is required.
+                    </small>
+                </div>
+  
+                <div class="field">
+                  <label for="image">Image Name</label>
+                  <input
+                    type="text"
+                    pInputText
+                    id="image"
+                    [(ngModel)]="client.image"
+                    required
+                    autofocus
+                    placeholder="Enter image name (e.g., carousel-voiture-5.jpg)"
+                  />
+                  <small class="p-error" *ngIf="submitted && !client.image">
+                      Image is required.
+                  </small>
+                </div>
+                <div class="field">
+                    <label for="telephone">Tel</label>
+                    <textarea
+                        id="telephone"
+                        pInputTextarea
+                        [(ngModel)]="client.telephone"
+                        required
+                        rows="3"
+                        cols="20">
+                    </textarea>
+                </div>
+  
+                <div class="field">
+                  <label for="email">Email</label>
+                  <input
+                      type="email"
+                      pInputText
+                      id="email"
+                      [(ngModel)]="client.email"
+                      required
+                      autofocus />
+                  <small class="p-error" *ngIf="submitted && !client.email">
+                      Email is required.
+                  </small>
+              </div>         
+  
+                <!-- <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="prix">Prix</label>
+                        <p-inputNumber
+                            id="prix"
+                            [(ngModel)]="product.prix"
+                            mode="currency"
+                            currency="USD"
+                            />
+                    </div>
+                    <div class="field col">
+                        <label for="qteStock">Quantity</label>
+                        <p-inputNumber
+                            id="qteStock"
+                            [(ngModel)]="product.qteStock" />
+                    </div>
+                </div> -->
+            </ng-template>
+  
+            <ng-template pTemplate="footer">
+                <p-button
+                    label="Cancel"
+                    icon="pi pi-times"
+                    [text]="true"
+                    (onClick)="hideDialog()" />
+                <p-button
+                    label="Save"
+                    icon="pi pi-check"
+                    [text]="true"
+                    (onClick)="saveClient()"
+                     />
+            </ng-template>
+    </p-dialog>
+  
+    <p-confirmDialog [style]="{ width: '450px' }" />
+  </div>
+  

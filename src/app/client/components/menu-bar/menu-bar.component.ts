@@ -17,7 +17,7 @@ export class MenuBarComponent {
         this.items = [
             {
                 label:'Home',
-                icon:'pi pi-fw pi-file'
+                icon:'pi pi-home'
             },
             {
                 label:'About us',
